@@ -28,14 +28,22 @@ const components = {
   Link,
 };
 
-type PostPageProps = {
+type GatedPostPageProps = {
   source: MDXRemoteSerializeResult;
   frontMatter: PostType;
 };
 
-const PostPage = ({ source, frontMatter }: PostPageProps): JSX.Element => {
-  const { account } = useEthers();
+type PostPageProps = {
+  source: MDXRemoteSerializeResult;
+  frontMatter: PostType;
+  customMeta: MetaProps;
+};
 
+const GatedPostPage = ({
+  source,
+  frontMatter,
+}: GatedPostPageProps): JSX.Element => {
+  const { account } = useEthers();
   const customMeta: MetaProps = {
     title: `${frontMatter.title} - Hunter Chang`,
     description: frontMatter.description,
@@ -44,22 +52,41 @@ const PostPage = ({ source, frontMatter }: PostPageProps): JSX.Element => {
     type: 'article',
     gated: frontMatter.gated,
   };
+
+  if (frontMatter.gated && account) {
+    return (
+      <Layout customMeta={customMeta}>
+        <PostPage
+          source={source}
+          frontMatter={frontMatter}
+          customMeta={customMeta}
+        />
+      </Layout>
+    );
+  } else {
+    return (
+      <Layout customMeta={customMeta}>
+        <></>
+      </Layout>
+    );
+  }
+};
+
+const PostPage = ({ source, frontMatter }: PostPageProps): JSX.Element => {
+  // const customMeta: MetaProps = customMeta
+
   return (
-    <Layout customMeta={customMeta}>
-      {account && (
-        <article>
-          <h1 className="mb-3 text-gray-900 dark:text-white">
-            {frontMatter.title}
-          </h1>
-          <p className="mb-10 text-sm text-gray-500 dark:text-gray-400">
-            {format(parseISO(frontMatter.date), 'MMMM dd, yyyy')}
-          </p>
-          <div className="prose dark:prose-dark">
-            <MDXRemote {...source} components={components} />
-          </div>
-        </article>
-      )}
-    </Layout>
+    <article>
+      <h1 className="mb-3 text-gray-900 dark:text-white">
+        {frontMatter.title}
+      </h1>
+      <p className="mb-10 text-sm text-gray-500 dark:text-gray-400">
+        {format(parseISO(frontMatter.date), 'MMMM dd, yyyy')}
+      </p>
+      <div className="prose dark:prose-dark">
+        <MDXRemote {...source} components={components} />
+      </div>
+    </article>
   );
 };
 
@@ -99,4 +126,4 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export default PostPage;
+export default GatedPostPage;
