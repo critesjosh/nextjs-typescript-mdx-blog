@@ -53,7 +53,7 @@ const GatedPostPage = ({
     gated: frontMatter.gated,
   };
 
-  if (frontMatter.gated && account) {
+  if ((frontMatter.gated && account) || !frontMatter.gated) {
     return (
       <Layout customMeta={customMeta}>
         <PostPage
