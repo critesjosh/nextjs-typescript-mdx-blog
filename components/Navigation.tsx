@@ -15,10 +15,24 @@ const Navigation = (): JSX.Element => {
       </Link>
       <div>
         <div>
-          <button onClick={() => activateBrowserWallet()}>Connect</button>
+          {!account && (
+            <button
+              className="inline-block px-7 py-3 rounded-md text-white dark:text-white bg-blue-600 hover:bg-blue-700 hover:text-white dark:hover:text-white"
+              onClick={() => activateBrowserWallet()}
+            >
+              Connect
+            </button>
+          )}
         </div>
         <div>
-          <button onClick={() => deactivate()}>Disonnect</button>
+          {account && (
+            <button
+              className="inline-block px-7 py-3 rounded-md text-white dark:text-white bg-blue-600 hover:bg-blue-700 hover:text-white dark:hover:text-white"
+              onClick={() => deactivate()}
+            >
+              Disonnect
+            </button>
+          )}
         </div>
         {account && <p>Account: {account}</p>}
       </div>
