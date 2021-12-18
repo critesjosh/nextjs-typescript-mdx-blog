@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@tailwindcss/typography": "^0.4.1",
+    "@usedapp/core": "^0.7.1",
     "date-fns": "^2.19.0",
     "gray-matter": "^4.0.2",
     "mdx-prism": "^0.3.3",
